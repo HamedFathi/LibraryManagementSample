@@ -2,6 +2,7 @@
 using HamedStack.CQRS;
 using HamedStack.TheResult.AspNetCore;
 using LMS.Application.Commands.Book.Create;
+using LMS.Application.DTOs;
 
 namespace LMS.WebApi.Endpoints.Book;
 
@@ -15,13 +16,13 @@ public class CreateBookEndpoint : IMinimalApiEndpoint
             //.Produces(StatusCodes.Status201Created) 
             //.ProducesValidationProblem() 
             //.Produces<ProblemDetails>(StatusCodes.Status500InternalServerError) 
-            .Accepts<BookRequest>("application/json") 
-            .WithName("CreateBook") 
+            .Accepts<BookRequest>("application/json")
+            .WithName("CreateBook")
             .WithOpenApi(operation =>
             {
                 operation.Summary = "Create a new book";
                 operation.Description = "Creates a new book in the library catalog using the provided details.";
-                operation.OperationId = "CreateBook"; 
+                operation.OperationId = "CreateBook";
                 //operation.Responses["201"].Description = "Book created successfully.";
                 //operation.Responses["400"].Description = "Invalid request data.";
                 //operation.Responses["500"].Description = "An unexpected error occurred.";
@@ -33,7 +34,12 @@ public class CreateBookEndpoint : IMinimalApiEndpoint
     {
         var output = await dispatcher.Send(new CreateBookCommand()
         {
-            Authors = request.Authors,
+            Authors = request.Authors.Select(a => new AuthorDto()
+            {
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Biography = a.Biography
+            }),
             Category = request.Category,
             Edition = request.Edition,
             Isbn = request.Isbn,

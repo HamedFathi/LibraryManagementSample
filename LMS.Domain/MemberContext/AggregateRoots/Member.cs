@@ -22,7 +22,7 @@ namespace LMS.Domain.MemberContext.AggregateRoots;
 
 public class Member : Entity<Guid>, IAggregateRoot
 {
-    public MemberName Name { get; }
+    public FullName FullName { get; }
     public MembershipType MembershipType { get; }
     public ContactInfo ContactInfo { get; }
     public MembershipDuration Duration { get; }
@@ -41,10 +41,10 @@ public class Member : Entity<Guid>, IAggregateRoot
     public IReadOnlyList<Fine> Fines => _fines.AsReadOnly();
     public IReadOnlyList<Payment> Payments => _payments.AsReadOnly();
 
-    private Member(MemberName name, MembershipType membershipType, ContactInfo contactInfo, MembershipDuration duration, Address address, Currency preferredCurrency)
+    private Member(FullName fullName, MembershipType membershipType, ContactInfo contactInfo, MembershipDuration duration, Address address, Currency preferredCurrency)
     {
         Id = Guid.NewGuid();
-        Name = name;
+        FullName = fullName;
         MembershipType = membershipType;
         ContactInfo = contactInfo;
         Duration = duration;
@@ -54,7 +54,7 @@ public class Member : Entity<Guid>, IAggregateRoot
 
     public static Result<Member> Create(string firstName, string lastName, MembershipType membershipType, ContactInfo contactInfo, MembershipDuration duration, Address address, Currency preferredCurrency)
     {
-        var nameResult = MemberName.Create(firstName, lastName);
+        var nameResult = FullName.Create(firstName, lastName);
         if (!nameResult.IsSuccess)
             return Result<Member>.Failure(nameResult.Errors);
 

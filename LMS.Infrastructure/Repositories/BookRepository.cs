@@ -40,14 +40,16 @@ public class BookRepository : IBookRepository
                 Condition = c.Condition,
                 Status = c.CurrentStatus
             }).ToList(),
-            BookAuthors = book.Authors.List.Select(a => new BookAuthorModel()
+            BookAuthors = book.Authors.Select(a => new BookAuthorModel()
             {
                 BookId = book.Id,
                 AuthorId = Guid.NewGuid(),
                 Author = new AuthorModel()
                 {
                     Id = Guid.NewGuid(),
-                    Name = a.Value
+                    FirstName = a.FirstName,
+                    LastName = a.LastName,
+                    Biography = a.Biography
                 }
             }).ToList()
         };

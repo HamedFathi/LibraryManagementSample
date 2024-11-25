@@ -1,28 +1,28 @@
 ﻿using HamedStack.TheAggregateRoot;
 using HamedStack.TheResult;
 
-namespace LMS.Domain.MemberContext.ValueObjects;
+namespace LMS.Domain.SharedKernel.ValueObjects;
 
-public class MemberName : ValueObject
+public class FullName : ValueObject
 {
     public string FirstName { get; }
     public string LastName { get; }
 
-    private MemberName(string firstName, string lastName)
+    private FullName(string firstName, string lastName)
     {
         FirstName = firstName;
         LastName = lastName;
     }
 
-    public static Result<MemberName> Create(string firstName, string lastName)
+    public static Result<FullName> Create(string firstName, string lastName)
     {
         if (string.IsNullOrWhiteSpace(firstName))
-            return Result<MemberName>.Failure("First name cannot be empty.");
+            return Result<FullName>.Failure("First name cannot be empty.");
 
         if (string.IsNullOrWhiteSpace(lastName))
-            return Result<MemberName>.Failure("Last name cannot be empty.");
+            return Result<FullName>.Failure("Last name cannot be empty.");
 
-        return Result<MemberName>.Success(new MemberName(firstName, lastName));
+        return Result<FullName>.Success(new FullName(firstName, lastName));
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()

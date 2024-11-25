@@ -1,5 +1,7 @@
 using FluentAssertions;
 using LMS.Application.Commands.Book.Create;
+using LMS.Application.DTOs;
+using LMS.Domain.BookContext.Entities;
 
 namespace LMS.IntegrationTests;
 
@@ -21,7 +23,11 @@ public class MyIntegrationTests : WebIntegrationTestBase
             Edition = "",
             Category = 3,
             MaxCopies = 10,
-            Authors = new List<string>() { "test" }
+            Authors = new List<AuthorDto>() { new AuthorDto()
+            {
+                FirstName = "test_name",
+                LastName = "test_last"
+            } }
 
         });
 

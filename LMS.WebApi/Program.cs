@@ -28,7 +28,11 @@ public class Program
 
         builder.Services.AddInfrastructureServices<LibSysDbContext>();
         builder.Services.AddApplicationServices();
-        builder.Services.AddOutboxBackgroundService(options => options.PollingIntervalSeconds = 1);
+        builder.Services.AddOutboxBackgroundService(options =>
+        {
+            options.PollingIntervalSeconds = 1;
+            options.BatchSize = 10;
+        });
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

@@ -10,9 +10,16 @@ public class AuthorModelConfig : IEntityTypeConfiguration<AuthorModel>
     {
         builder.HasKey(a => a.Id);
 
-        builder.Property(a => a.Name)
+        builder.Property(a => a.FirstName)
             .IsRequired()
             .HasMaxLength(150);
+
+        builder.Property(a => a.LastName)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.Property(a => a.Biography)
+            .HasMaxLength(2000);
 
         builder.HasMany(a => a.BookAuthors)
             .WithOne(ba => ba.Author)

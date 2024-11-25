@@ -10,35 +10,33 @@ namespace LMS.Domain.BookContext.AggregateRoots;
 public sealed class Book : Entity<Guid>, IAggregateRoot
 {
     public BookTitle Title { get; }
-    public Authors Authors { get; }
     public Isbn Isbn { get; }
     public PublicationInfo PublicationInfo { get; }
     public BookCategory Category { get; }
     public int MaxCopies { get; private set; }
 
+    private readonly List<Author> _authors = new();
     private readonly List<BookCopy> _copies = new();
     public IReadOnlyList<BookCopy> Copies => _copies.AsReadOnly();
+    public IReadOnlyList<Author> Authors => _authors.AsReadOnly();
 
-    private Book(BookTitle title, Authors authors, Isbn isbn, PublicationInfo publicationInfo, BookCategory category, int maxCopies)
+
+    private Book(BookTitle title, IEnumerable<Author> authors, Isbn isbn, PublicationInfo publicationInfo, BookCategory category, int maxCopies)
     {
         Id = Guid.NewGuid();
         Title = title;
-        Authors = authors;
         Isbn = isbn;
         PublicationInfo = publicationInfo;
         Category = category;
         MaxCopies = maxCopies; 
+        _authors.AddRange(authors);
     }
 
-    public static Result<Book> Create(string title, IEnumerable<string> authors, string isbn, string publisher, int publicationYear, int category, int maxCopies, string edition = "")
+    public static Result<Book> Create(string title, IEnumerable<Author> authors, string isbn, string publisher, int publicationYear, int category, int maxCopies, string edition = "")
     {
         var titleResult = BookTitle.Create(title);
         if (!titleResult.IsSuccess)
             return Result<Book>.Failure(titleResult.Errors);
-
-        var authorsResult = Authors.Create(authors);
-        if (!authorsResult.IsSuccess)
-            return Result<Book>.Failure(authorsResult.Errors);
 
         var publicationInfoResult = PublicationInfo.Create(publisher, publicationYear, edition);
         if (!publicationInfoResult.IsSuccess)
@@ -52,7 +50,7 @@ public sealed class Book : Entity<Guid>, IAggregateRoot
         if (!categoryResult)
             return Result<Book>.Failure($"{nameof(BookCategory)} value '{category}' is invalid.");
 
-        return Result<Book>.Success(new Book(titleResult.Value!, authorsResult.Value!, isbnResult!, publicationInfoResult.Value!, bookCategory, maxCopies));
+        return Result<Book>.Success(new Book(titleResult.Value!, authors, isbnResult!, publicationInfoResult.Value!, bookCategory, maxCopies));
     }
 
     public Result<bool> AddCopy(CopyCondition condition)

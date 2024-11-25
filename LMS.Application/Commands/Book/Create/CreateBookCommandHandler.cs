@@ -3,6 +3,7 @@ using HamedStack.CQRS;
 using HamedStack.TheResult;
 using HamedStack.TheResult.FluentValidation;
 using LMS.Domain.BookContext.DomainEvents;
+using LMS.Domain.BookContext.Entities;
 using LMS.Domain.BookContext.Repositories;
 
 namespace LMS.Application.Commands.Book.Create;
@@ -25,8 +26,19 @@ public class CreateBookCommandHandler : ICommandHandler<CreateBookCommand, Guid>
             return validationResult.ToResult<Guid>();
         }
 
+        var authorList = new List<Author>();
+        foreach (var requestAuthor in request.Authors)
+        {
+            var authorResult = Author.Create(requestAuthor.FirstName, requestAuthor.LastName, requestAuthor.Biography);
+            if (!authorResult.IsSuccess)
+            {
+                return Result<Guid>.Failure(Guid.Empty, authorResult.Errors);
+            }
+            authorList.Add(authorResult!);
+        }
+
         var book =
-            Domain.BookContext.AggregateRoots.Book.Create(request.Title, request.Authors, request.Isbn!,
+            Domain.BookContext.AggregateRoots.Book.Create(request.Title, authorList, request.Isbn!,
                 request.Publisher, request.PublicationYear, request.Category, request.MaxCopies, request.Edition);
         if (!book.IsSuccess)
         {

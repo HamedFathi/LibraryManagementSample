@@ -16,7 +16,9 @@ namespace LMS.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false)
+                    FirstName = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    LastName = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Biography = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
