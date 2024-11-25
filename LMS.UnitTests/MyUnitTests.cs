@@ -20,8 +20,9 @@ public class MyUnitTests
         {
             Author.Create("author_first","author_last","")!
         };
-        var book = 
+        var book =
             Book.Create("test", authors, "978-1-56619-909-4", "test", 2000, 2, 10, "");
+        
         mockRepo.AddAsync(Arg.Any<Book>(), CancellationToken.None)
             .Returns(Task.FromResult(book.Value)!);
 
@@ -50,7 +51,9 @@ public class MyUnitTests
 
         };
 
-        await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
 
         await mockValidator.Received(1).ValidateAsync(Arg.Any<CreateBookCommand>(), CancellationToken.None);
         await mockRepo.Received(1).AddAsync(Arg.Any<Book>());
