@@ -11,6 +11,7 @@ using Polly;
 using System.Threading.RateLimiting;
 using Asp.Versioning;
 using HamedStack.AspNetCore.Endpoint;
+using HamedStack.TheResult.AspNetCore;
 using Serilog;
 
 namespace LMS.WebApi;
@@ -127,6 +128,8 @@ public class Program
 
         app.MapControllers();
         app.MapMinimalApiEndpoints();
+
+        app.UseResultException();
 
         app.MapHealthChecks("/healthz");
 
