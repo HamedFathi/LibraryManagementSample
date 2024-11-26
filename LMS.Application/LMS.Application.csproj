@@ -9,7 +9,6 @@
 	<ItemGroup>
 		<PackageReference Include="HamedStack.CQRS.FluentValidation" Version="1.0.2" />
 		<PackageReference Include="HamedStack.CQRS" Version="1.0.1" />
-		<PackageReference Include="HamedStack.CQRS.FluentValidation" Version="1.0.2" />
 		<PackageReference Include="HamedStack.Result.FluentValidation" Version="1.0.2" />
 	</ItemGroup>
 

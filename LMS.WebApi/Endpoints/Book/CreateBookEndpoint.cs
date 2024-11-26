@@ -1,4 +1,6 @@
-﻿using HamedStack.AspNetCore.Endpoint;
+﻿using Asp.Versioning;
+using Asp.Versioning.Builder;
+using HamedStack.AspNetCore.Endpoint;
 using HamedStack.CQRS;
 using HamedStack.TheResult.AspNetCore;
 using LMS.Application.Commands.Book.Create;
@@ -6,11 +8,16 @@ using LMS.Application.DTOs;
 
 namespace LMS.WebApi.Endpoints.Book;
 
-public class CreateBookEndpoint : IMinimalApiEndpoint
+public class CreateBookEndpoint : MinimalApiEndpointBase
 {
-    public void HandleEndpoint(IEndpointRouteBuilder endpoint)
+    public override void HandleEndpoint(IEndpointRouteBuilder endpoint)
     {
-        endpoint.MapPost("/book", CreateBookEndpointHandler)
+        var apiVersionSet = Application.NewApiVersionSet()
+            .HasApiVersion(new ApiVersion(1))
+            .ReportApiVersions()
+            .Build();
+
+        endpoint.MapPost("/v{version:apiVersion}/book", CreateBookEndpointHandler)
             .WithTags("Book")
             .WithDescription("Creates a new book in the system.")
             //.Produces(StatusCodes.Status201Created) 
@@ -27,7 +34,10 @@ public class CreateBookEndpoint : IMinimalApiEndpoint
                 //operation.Responses["400"].Description = "Invalid request data.";
                 //operation.Responses["500"].Description = "An unexpected error occurred.";
                 return operation;
-            });
+            })
+            .WithApiVersionSet(apiVersionSet)
+            .MapToApiVersion(1)
+            ;
     }
 
     private static async Task<IResult> CreateBookEndpointHandler(BookRequest request, ICommandQueryDispatcher dispatcher)
