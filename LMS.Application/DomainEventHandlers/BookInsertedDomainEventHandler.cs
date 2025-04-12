@@ -1,15 +1,14 @@
 ﻿using HamedStack.CQRS;
 using LMS.Domain.BookContext.DomainEvents;
 
-namespace LMS.Application.DomainEventHandlers
+namespace LMS.Application.DomainEventHandlers;
+
+public class BookInsertedDomainEventHandler : IDomainEventHandler<BookInserted>
 {
-    public class BookInsertedDomainEventHandler : IDomainEventHandler<BookInserted>
+    public Task Handle(BookInserted notification, CancellationToken cancellationToken)
     {
-        public Task Handle(BookInserted notification, CancellationToken cancellationToken)
-        {
             
 
-            return Task.CompletedTask;
-        }
+        return Task.CompletedTask;
     }
 }

@@ -1,7 +1,6 @@
 using FluentAssertions;
 using LMS.Application.Commands.Book.Create;
 using LMS.Application.DTOs;
-using LMS.Domain.BookContext.Entities;
 
 namespace LMS.IntegrationTests;
 

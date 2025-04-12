@@ -1,9 +1,8 @@
 ﻿using HamedStack.TheAggregateRoot.Events;
 
-namespace LMS.Domain.BookContext.DomainEvents
+namespace LMS.Domain.BookContext.DomainEvents;
+
+public class BookInserted : DomainEvent
 {
-    public class BookInserted : DomainEvent
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

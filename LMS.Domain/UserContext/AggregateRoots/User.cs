@@ -1,13 +1,14 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using HamedStack.TheAggregateRoot;
+using HamedStack.TheAggregateRoot.Abstractions;
 using HamedStack.TheResult;
 using LMS.Domain.MemberContext.AggregateRoots;
 using LMS.Domain.UserContext.Enumerations;
 
-namespace LMS.Domain.UserContext.Entities;
+namespace LMS.Domain.UserContext.AggregateRoots;
 
-public class User : Entity<Guid>
+public class User : Entity<Guid>, IAggregateRoot
 {
     public string Username { get; private set; }
     public string PasswordHash { get; private set; }
@@ -16,6 +17,7 @@ public class User : Entity<Guid>
     public string FullName { get; private set; }
 
     public Member? Member { get; private set; }
+    public bool IsMember => Member is not null;
 
     private User(string username, string passwordHash, UserRole role, string email, string fullName)
     {
@@ -57,7 +59,7 @@ public class User : Entity<Guid>
 
     public Result<bool> LinkToMember(Member member)
     {
-        if (Member != null)
+        if (IsMember)
             return Result<bool>.Failure(false, "User is already linked to a member.");
 
         Member = member;

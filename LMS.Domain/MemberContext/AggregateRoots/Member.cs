@@ -16,7 +16,7 @@ using LMS.Domain.ReservationContext.Entities;
 using LMS.Domain.ReservationContext.Enumerations;
 using LMS.Domain.SharedKernel.Enumerations;
 using LMS.Domain.SharedKernel.ValueObjects;
-using LMS.Domain.UserContext.Entities;
+using LMS.Domain.UserContext.AggregateRoots;
 
 namespace LMS.Domain.MemberContext.AggregateRoots;
 
